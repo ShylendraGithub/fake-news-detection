@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FactLens</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #12121c;
+      color: #e2e2f0;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 0;
+    }
+
+    header h1 {
+      font-size: 60px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    header p {
+      margin-top: 10px;
+      opacity: 0.8;
+      font-size: 20px;
+    }
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .input-box {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+
+    .input-box input {
+      flex: 1;
+      padding: 15px 20px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      font-size: 18px;
+      color: white;
+    }
+
+    .input-box input:focus {
+      outline: none;
+      border-color: #b48cff;
+    }
+
+    .input-box button {
+      padding: 15px 25px;
+      font-size: 18px;
+      background: #7b4dff;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .input-box button:hover {
+      background: #6a3fff;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding-bottom: 40px;
+    }
+
+    .card-header {
+      background: rgba(150, 100, 250, 0.15);
+      padding: 20px 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .card-header p {
+      margin: 0;
+      opacity: 0.75;
+    }
+
+    .card-header .statement {
+      margin-top: 5px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+  
+    .verdict {
+      text-align: center;
+      font-size: 70px;
+      font-weight: 900;
+      margin: 40px 0;
+    }
+
+    .green { color: #5fffa1; }
+    .red   { color: #ff6a6a; }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin: 20px 30px;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-box .num {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .sources {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .source-pill {
+      display: inline-block;
+      padding: 8px 15px;
+      margin: 5px;
+      background: rgba(140, 80, 255, 0.2);
+      border-radius: 20px;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .summary {
+      margin: 40px auto 0;
+      width: 80%;
+      text-align: center;
+      line-height: 1.5;
+      opacity: 0.9;
+      font-size: 18px;
+    }
+
+    footer {
+      text-align: center;
+      margin: 40px 0;
+      opacity: 0.4;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>FactLens</h1>
+    <p>Real-Time Truth Verification Engine • 2025</p>
+  </header>
+
+  <div class="container">
+    <form method="POST">
+      <div class="input-box">
+        <input type="text" name="claim" placeholder="Enter any statement..." required>
+        <button type="submit"><i class="fas fa-search"></i> VERIFY</button>
+      </div>
+    </form>
+
+    {% if result %}
+    <div class="card">
+
+      <div class="card-header">
+        <p>Analyzed statement:</p>
+        <p class="statement">"{{ result.claim }}"</p>
+      </div>
+
+      <div class="verdict 
+        {% if result.verdict == 'REAL' or result.verdict == 'VERIFIED' %}
+            green
+        {% else %}
+            red
+        {% endif %}
+      ">
+        {{ result.verdict }}
+      </div>
+
+      <div class="stats">
+        <div class="stat-box">
+          <div class="num">{{ result.article_count }}</div>
+          <div>Sources Found</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="num">{{ result.credibility_score }}%</div>
+          <div>Confidence</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="num">{{ result.sources|length }}</div>
+          <div>Trusted Outlets</div>
+        </div>
+      </div>
+
+      {% if result.sources and result.sources != ['None'] %}
+      <div class="sources">
+        <p>Confirmed by</p>
+        {% for source in result.sources %}
+          <span class="source-pill">{{ source }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="summary">
+        {{ result.summary }}
+      </div>
+
+    </div>
+    {% endif %}
+
+    <footer>
+      Powered by Google Custom Search • 28 Trusted Sources • 2025
+    </footer>
+  </div>
+
+</body>
+</html>
